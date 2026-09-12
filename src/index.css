@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-celebrate-navy: #0A2947;
+  --color-celebrate-cream: #F3E4C9;
+  --color-celebrate-sage: #D3D4C0;
+  --color-celebrate-terracotta: #8B5E3C;
+  
+  --font-display: "DM Serif Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-celebrate-cream text-celebrate-navy font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
