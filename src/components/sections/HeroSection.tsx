@@ -1,5 +1,15 @@
 import { Button } from "../ui/Button";
 import DriftWall from "../marketing/DriftWall/DriftWall";
+import { AnimatedWord } from "../ui/AnimatedWord";
+
+const heroAdjectives = [
+  "beautiful",
+  "elegant",
+  "joyful",
+  "meaningful",
+  "memorable",
+  "magical"
+];
 
 export function HeroSection() {
   return (
@@ -18,11 +28,11 @@ export function HeroSection() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
         {/* Text Container: Centers on mobile, aligns left and takes 50% width on desktop */}
         <div className="lg:w-[55%] text-center lg:text-left lg:pr-12">
-          <h1 className="text-5xl md:text-7xl lg:text-6xl font-display text-celebrate-navy tracking-tight mb-8 leading-[1.1]">
-            Your celebration deserves to feel special.
+          <h1 className="text-5xl md:text-7xl lg:text-5xl font-display text-celebrate-navy tracking-tight mb-8 leading-[1.1]">
+            Your celebration deserves to feel <AnimatedWord words={heroAdjectives} />
           </h1>
-          <p className="mt-6 text-xl md:text-2xl text-celebrate-navy/80 max-w-3xl mx-auto lg:mx-0 font-sans leading-relaxed mb-10">
-            We make planning feel effortless, so the excitement can come first.
+          <p className="mt-6 text-xl md:text-1.5xl text-celebrate-navy/80 max-w-3xl mx-auto lg:mx-0 font-sans leading-relaxed mb-10">
+            We make planning feel effortless, so the <br/>excitement can come first.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
