@@ -11,7 +11,7 @@ export function EventTypes() {
   ];
 
   return (
-    <section id="event-types" className="py-24 bg-white">
+    <section id="event-types" className="py-24 bg-white min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <SectionHeader
           title="Every Celebration Supported"

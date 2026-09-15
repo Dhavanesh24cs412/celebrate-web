@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { Button } from "../ui/Button";
+
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,11 +46,7 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" size="sm">Sign In</Button>
-          <Button size="sm">Get Started</Button>
-        </div>
+
 
         {/* Mobile Menu Toggle */}
         <button
@@ -80,10 +76,7 @@ export function Navbar() {
               </a>
             ))}
           </div>
-          <div className="mt-auto flex flex-col gap-4">
-            <Button variant="outline" className="w-full">Sign In</Button>
-            <Button className="w-full">Get Started</Button>
-          </div>
+
         </div>
       </div>
     </nav>

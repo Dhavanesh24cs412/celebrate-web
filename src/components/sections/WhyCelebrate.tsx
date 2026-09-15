@@ -12,7 +12,7 @@ export function WhyCelebrate() {
   ];
 
   return (
-    <section id="why-celebrate" className="py-24 bg-celebrate-cream">
+    <section id="why-celebrate" className="py-24 bg-celebrate-cream min-h-screen flex flex-col justify-center">
       <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
         <SectionHeader
           title="Why Choose Celebrate?"

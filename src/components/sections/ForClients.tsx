@@ -27,7 +27,7 @@ export function ForClients() {
   ];
 
   return (
-    <section id="clients" className="py-24 bg-white">
+    <section id="clients" className="py-24 bg-white min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
