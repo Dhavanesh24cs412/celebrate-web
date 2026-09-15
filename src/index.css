@@ -11,6 +11,11 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
   body {
     @apply bg-celebrate-cream text-celebrate-navy font-sans antialiased;
   }
