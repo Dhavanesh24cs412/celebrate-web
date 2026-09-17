@@ -1,6 +1,7 @@
 import { SectionHeader } from "../ui/SectionHeader";
 import { Button } from "../ui/Button";
 import { Search, Image as ImageIcon, Scale, CheckCircle2 } from "lucide-react";
+import { ClientProposalCard } from "../marketing/ClientProposalCard";
 
 export function ForClients() {
   const benefits = [
@@ -58,23 +59,8 @@ export function ForClients() {
             </div>
           </div>
           
-          <div className="relative h-[600px] bg-celebrate-cream rounded-2xl flex items-center justify-center overflow-hidden border border-celebrate-sage/30 p-8">
-             <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiMwQTI5NDciLz48L3N2Zz4=')] [background-size:24px_24px]" />
-             <div className="bg-white p-8 rounded-xl shadow-lg relative z-10 w-full max-w-sm">
-                <div className="h-4 w-1/3 bg-celebrate-sage/40 rounded mb-6"></div>
-                <div className="h-32 w-full bg-celebrate-cream rounded-lg mb-6 flex items-center justify-center text-celebrate-sage font-medium italic">
-                  [ AI Design Canvas Preview ]
-                </div>
-                <div className="space-y-3">
-                  <div className="h-4 w-full bg-celebrate-sage/20 rounded"></div>
-                  <div className="h-4 w-5/6 bg-celebrate-sage/20 rounded"></div>
-                  <div className="h-4 w-4/6 bg-celebrate-sage/20 rounded"></div>
-                </div>
-                <div className="mt-8 flex justify-between items-center pt-4 border-t border-celebrate-sage/20">
-                  <div className="h-8 w-24 bg-celebrate-sage/30 rounded"></div>
-                  <div className="h-10 w-32 bg-celebrate-navy rounded"></div>
-                </div>
-             </div>
+          <div className="relative min-h-[600px] bg-celebrate-cream rounded-2xl flex items-center justify-center border border-celebrate-sage/30 p-6 md:p-10 lg:max-w-[540px] lg:ml-auto w-full">
+             <ClientProposalCard />
           </div>
         </div>
       </div>
