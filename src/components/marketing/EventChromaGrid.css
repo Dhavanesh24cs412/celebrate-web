@@ -1,0 +1,89 @@
+.chroma-grid {
+  /* Default state for grid */
+  position: relative;
+  /* Allow grid to track pointer smoothly */
+}
+
+/* Base card styles */
+.chroma-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Default vars in case GSAP hasn't kicked in yet */
+  --x: 50%;
+  --y: 50%;
+}
+
+/* Spotlight overlay */
+.chroma-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  /* The radial gradient uses --x and --y calculated by GSAP */
+  background: radial-gradient(
+    600px circle at var(--x) var(--y),
+    rgba(243, 228, 201, 0.12),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+/* Card hover state spotlight */
+.chroma-grid:hover .chroma-card::before {
+  opacity: 1;
+}
+
+/* The subdued image state (when not hovered) */
+.chroma-image {
+  filter: grayscale(30%) brightness(0.85) contrast(1.05);
+  transition: filter 0.6s ease, transform 0.8s ease;
+  will-change: filter, transform;
+}
+
+/* When the grid is hovered, all cards become more subdued */
+.chroma-grid:hover .chroma-image {
+  filter: grayscale(60%) brightness(0.6) contrast(1.1);
+}
+
+/* EXCEPT the card under the pointer, which regains its full glory */
+.chroma-grid:hover .chroma-card:hover .chroma-image {
+  filter: grayscale(0%) brightness(1.05) contrast(1);
+  transform: scale(1.04);
+}
+
+/* Border treatment */
+.chroma-border-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  border: 1px solid rgba(243, 228, 201, 0.15); /* subtle cream border */
+  border-radius: inherit;
+  transition: border-color 0.5s ease, background 0.5s ease;
+  pointer-events: none;
+}
+
+.chroma-card:hover .chroma-border-glow {
+  border-color: rgba(243, 228, 201, 0.4);
+}
+
+/* Disable pointer tracking for touch devices */
+@media (hover: none) {
+  .chroma-card::before {
+    display: none;
+  }
+  
+  .chroma-image {
+    filter: none;
+  }
+  
+  .chroma-grid:hover .chroma-image {
+    filter: none;
+  }
+
+  .chroma-grid:hover .chroma-card:hover .chroma-image {
+    transform: none;
+  }
+}
