@@ -1,4 +1,5 @@
 import { Button } from "../ui/Button";
+import { BlurText } from "../ui/BlurText";
 
 export function CTA() {
   return (
@@ -7,11 +8,19 @@ export function CTA() {
       <div className="absolute -top-40 -right-40 w-96 h-96 bg-celebrate-terracotta/10 rounded-full blur-3xl -z-10" />
       
       <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-        <h2 className="text-4xl md:text-6xl font-display text-celebrate-navy mb-8">
-          Ready to experience the future of event management?
-        </h2>
+        <BlurText
+          as="h2"
+          text="Ready to celebrate?"
+          animateBy="words"
+          direction="top"
+          delay={120}
+          stepDuration={0.35}
+          threshold={0.1}
+          rootMargin="0px"
+          className="text-4xl md:text-6xl font-display text-celebrate-navy mb-8 justify-center"
+        />
         <p className="text-xl text-celebrate-navy/70 mb-10 max-w-2xl mx-auto">
-          Whether you're a client planning a celebration or a planner growing a business, Celebrate is built for you.
+          Whether you're planning a celebration or growing your event business, Celebrate is built for you.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
