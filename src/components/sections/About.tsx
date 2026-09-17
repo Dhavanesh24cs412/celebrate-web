@@ -5,31 +5,35 @@ export function About() {
     <section id="about" className="py-24 bg-white min-h-screen flex flex-col justify-center">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <SectionHeader
-          title="Beyond a Marketplace."
-          subtitle="The event industry is fragmented. Celebrate is the unified solution."
+          title="WHY CELEBRATE"
+          subtitle="Celebrate brings clients and planners together, making it easier to turn an idea into an experience worth remembering."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mt-16">
-          <div className="order-2 md:order-1 relative h-96 bg-celebrate-cream rounded-2xl flex items-center justify-center overflow-hidden border border-celebrate-sage/30">
-             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-celebrate-terracotta via-celebrate-cream to-celebrate-cream" />
-             <p className="text-celebrate-sage font-medium italic z-10 text-center px-6">
-               [ Placeholder: Image depicting seamless event planning / celebration ]
-             </p>
+          <div className="order-2 md:order-1 relative h-96 rounded-2xl overflow-hidden border border-celebrate-sage/30">
+            <img 
+              src="/images/about-img.webp" 
+              alt="People experiencing a seamless celebration" 
+              className="w-full h-full object-cover"
+            />
           </div>
           
           <div className="order-1 md:order-2">
             <h3 className="text-3xl font-display text-celebrate-navy mb-6">
-              Replacing disconnected tools with a seamless ecosystem.
+              Great celebrations begin with the right people.
             </h3>
             <div className="space-y-6 text-lg text-celebrate-navy/70">
               <p>
-                From a client's perspective, discovering and evaluating suitable event management teams remains challenging. Clients often face uncertainty regarding event quality, design expectations, budgets, and overall service transparency.
+                Every celebration starts with a reason. A wedding. A birthday. A milestone. A moment worth gathering for.
               </p>
               <p>
-                Event management teams face a broader challenge: managing inquiries, preparing proposals, visualizing event concepts, coordinating vendors, and recruiting professionals using disconnected tools and manual processes.
+                But between the idea and the day itself, planning can become complicated.
+              </p>
+              <p>
+                Celebrate makes that journey simpler. Clients find people who fit their vision. Planners find opportunities where their work belongs. Both spend less time searching and coordinating, and more time creating something meaningful.
               </p>
               <p className="text-celebrate-navy font-medium">
-                Celebrate transforms the event management process by integrating client acquisition, AI-assisted proposal creation, workforce management, and business operations into one connected platform.
+                Better opportunities for planners. Easier choices for clients. One place to bring it together.
               </p>
             </div>
           </div>
