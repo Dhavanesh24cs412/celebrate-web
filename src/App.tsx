@@ -6,7 +6,7 @@ import { HowItWorks } from "./components/sections/HowItWorks";
 import { ForClients } from "./components/sections/ForClients";
 import { ForPlanners } from "./components/sections/ForPlanners";
 import { EventTypes } from "./components/sections/EventTypes";
-import { WhyCelebrate } from "./components/sections/WhyCelebrate";
+
 import { CTA } from "./components/sections/CTA";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
         <ForClients />
         <ForPlanners />
         <EventTypes />
-        <WhyCelebrate />
+
         <CTA />
       </main>
       <Footer />

@@ -2,7 +2,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="footer" className="bg-celebrate-navy text-celebrate-cream py-16">
+    <footer id="footer" className="bg-celebrate-navy text-celebrate-cream py-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand Col */}
@@ -45,7 +45,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-celebrate-sage/20 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-8 pt-4 border-t border-celebrate-sage/20 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-celebrate-sage/60">
             &copy; {currentYear} Celebrate. All rights reserved.
           </p>

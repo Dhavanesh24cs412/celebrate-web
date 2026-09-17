@@ -3,7 +3,7 @@ import { BlurText } from "../ui/BlurText";
 
 export function CTA() {
   return (
-    <section id="cta" className="py-24 bg-white relative overflow-hidden min-h-screen flex flex-col justify-center">
+    <section id="cta" className="py-48 bg-white relative overflow-hidden flex flex-col justify-center">
       <div className="absolute inset-0 bg-celebrate-navy/5" />
       <div className="absolute -top-40 -right-40 w-96 h-96 bg-celebrate-terracotta/10 rounded-full blur-3xl -z-10" />
       
