@@ -1,5 +1,6 @@
 import { Button } from "../ui/Button";
 import { BlurText } from "../ui/BlurText";
+import { Link } from "react-router-dom";
 
 export function CTA() {
   return (
@@ -24,12 +25,16 @@ export function CTA() {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="w-full sm:w-auto px-10 shadow-lg shadow-celebrate-navy/10">
-            Start Planning (Client)
-          </Button>
-          <Button size="lg" variant="outline" className="w-full sm:w-auto px-10 bg-white">
-            Join Platform (Planner)
-          </Button>
+          <Link to="/auth" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full px-10 shadow-lg shadow-celebrate-navy/10">
+              Start Planning (Client)
+            </Button>
+          </Link>
+          <Link to="/auth" className="w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full px-10 bg-white">
+              Join Platform (Planner)
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
