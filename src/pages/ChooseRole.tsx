@@ -67,7 +67,14 @@ export const ChooseRole: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {/* Client Card */}
           <div className="bg-white rounded-3xl p-8 border border-celebrate-navy/5 shadow-sm flex flex-col items-center text-center">
-            <h2 className="font-serif text-2xl text-celebrate-navy mb-4">Plan your celebration</h2>
+            <h2 className="font-serif text-2xl text-celebrate-navy mb-2">Plan your celebration</h2>
+            <div className="flex justify-center mb-6 mt-2">
+              <img 
+                src="/mascot/client-role.webp" 
+                alt="Client Mascot" 
+                className="h-28 sm:h-36 md:h-40 object-contain transition-transform hover:scale-105 duration-300"
+              />
+            </div>
             <p className="text-celebrate-navy/70 mb-8 flex-1">
               Find the right people and bring your event together with less effort.
             </p>
@@ -82,7 +89,14 @@ export const ChooseRole: React.FC = () => {
 
           {/* Planner Card */}
           <div className="bg-white rounded-3xl p-8 border border-celebrate-navy/5 shadow-sm flex flex-col items-center text-center">
-            <h2 className="font-serif text-2xl text-celebrate-navy mb-4">Grow your event business</h2>
+            <h2 className="font-serif text-2xl text-celebrate-navy mb-2">Grow your event business</h2>
+            <div className="flex justify-center mb-6 mt-2">
+              <img 
+                src="/mascot/planner-role.webp" 
+                alt="Planner Mascot" 
+                className="h-28 sm:h-36 md:h-40 object-contain transition-transform hover:scale-105 duration-300"
+              />
+            </div>
             <p className="text-celebrate-navy/70 mb-8 flex-1">
               Discover relevant opportunities and build your work with Celebrate.
             </p>
