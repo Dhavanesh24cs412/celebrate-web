@@ -1,4 +1,4 @@
-import { SectionHeader } from "../ui/SectionHeader";
+import { SectionHeader } from "../../../../core/components/ui/SectionHeader";
 import { EventChromaGrid } from "../marketing/EventChromaGrid";
 
 export function EventTypes() {

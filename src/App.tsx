@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './components/auth/AuthProvider';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AuthProvider } from './domains/auth/components/AuthProvider';
+import { ProtectedRoute } from './domains/auth/components/ProtectedRoute';
 
-import { Landing } from './pages/Landing';
-import { Auth } from './pages/Auth';
-import { AuthCallback } from './pages/AuthCallback';
-import { ChooseRole } from './pages/ChooseRole';
-import { ClientOnboarding } from './pages/onboarding/ClientOnboarding';
-import { PlannerOnboarding } from './pages/onboarding/PlannerOnboarding';
-import { ClientHome } from './pages/home/ClientHome';
-import { PlannerHome } from './pages/home/PlannerHome';
+import { Landing } from './domains/landing/pages/Landing';
+import { Auth } from './domains/auth/pages/Auth';
+import { AuthCallback } from './domains/auth/pages/AuthCallback';
+import { ChooseRole } from './domains/onboarding/pages/ChooseRole';
+import { ClientOnboarding } from './domains/onboarding/pages/ClientOnboarding';
+import { PlannerOnboarding } from './domains/onboarding/pages/PlannerOnboarding';
+import { ClientHome } from './domains/client/pages/ClientHome';
+import { PlannerHome } from './domains/planner/pages/PlannerHome';
 
 function App() {
   return (

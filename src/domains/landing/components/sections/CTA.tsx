@@ -1,5 +1,5 @@
-import { Button } from "../ui/Button";
-import { BlurText } from "../ui/BlurText";
+import { Button } from "../../../../core/components/ui/Button";
+import { BlurText } from "../../../../core/components/ui/BlurText";
 import { Link } from "react-router-dom";
 
 export function CTA() {

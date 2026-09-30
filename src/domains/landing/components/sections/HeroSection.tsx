@@ -1,6 +1,6 @@
-import { Button } from "../ui/Button";
+import { Button } from "../../../../core/components/ui/Button";
 import DriftWall from "../marketing/DriftWall/DriftWall";
-import { AnimatedWord } from "../ui/AnimatedWord";
+import { AnimatedWord } from "../../../../core/components/ui/AnimatedWord";
 
 const heroAdjectives = [
   "beautiful",

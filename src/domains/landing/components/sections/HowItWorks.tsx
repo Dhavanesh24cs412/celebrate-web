@@ -1,4 +1,4 @@
-import { SectionHeader } from "../ui/SectionHeader";
+import { SectionHeader } from "../../../../core/components/ui/SectionHeader";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import { useRef, useEffect } from "react";
 

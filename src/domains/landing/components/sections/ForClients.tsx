@@ -1,5 +1,5 @@
-import { SectionHeader } from "../ui/SectionHeader";
-import { Button } from "../ui/Button";
+import { SectionHeader } from "../../../../core/components/ui/SectionHeader";
+import { Button } from "../../../../core/components/ui/Button";
 import { Search, Image as ImageIcon, Scale, CheckCircle2 } from "lucide-react";
 import { ClientProposalCard } from "../marketing/ClientProposalCard";
 

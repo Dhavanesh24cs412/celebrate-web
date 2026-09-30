@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../components/auth/AuthProvider';
-import { Button } from '../components/ui/Button';
+import { supabase } from '../../../core/lib/supabase';
+import { useAuth } from '../components/AuthProvider';
+import { Button } from '../../../core/components/ui/Button';
 
 interface AuthFaceProps {
   type: 'signin' | 'signup';

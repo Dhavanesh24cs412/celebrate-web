@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../components/auth/AuthProvider';
-import { Button } from '../../components/ui/Button';
+import { supabase } from '../../../core/lib/supabase';
+import { useAuth } from '../../auth/components/AuthProvider';
+import { Button } from '../../../core/components/ui/Button';
 import { ArrowLeft } from 'lucide-react';
 
 export const ClientOnboarding: React.FC = () => {

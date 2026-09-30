@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../../components/auth/AuthProvider';
-import { Button } from '../../components/ui/Button';
+import { useAuth } from '../../auth/components/AuthProvider';
+import { Button } from '../../../core/components/ui/Button';
 
 export const ClientHome: React.FC = () => {
   const { signOut } = useAuth();

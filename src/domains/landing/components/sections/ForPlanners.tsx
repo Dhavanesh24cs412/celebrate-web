@@ -1,5 +1,5 @@
-import { SectionHeader } from "../ui/SectionHeader";
-import { Button } from "../ui/Button";
+import { SectionHeader } from "../../../../core/components/ui/SectionHeader";
+import { Button } from "../../../../core/components/ui/Button";
 import { Users, Briefcase, Calendar, Star } from "lucide-react";
 import { PlannerDashboardMockup } from "../marketing/PlannerDashboardMockup";
 

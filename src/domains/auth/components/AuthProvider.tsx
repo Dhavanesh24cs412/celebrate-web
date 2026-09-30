@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../../../core/lib/supabase';
 
 export type UserRole = 'client' | 'planner';
 
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, currentSession) => {
+      async (_event: any, currentSession: any) => {
         if (!mounted) return;
         
         setSession(currentSession);
