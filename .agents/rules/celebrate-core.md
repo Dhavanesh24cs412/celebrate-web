@@ -30,6 +30,7 @@ Always:
 18. Maintain the Celebrate brand color system.
 19. Treat lifecycle states as explicit domain rules.
 20. Treat server-confirmed state as authoritative.
+21. All currency metrics must be processed, displayed, and stored in Lakhs (L). For example, 50k is 0.5L. Do not use raw INR thousands/millions anywhere in the UI or DB.
 
 Before implementing a significant feature:
 

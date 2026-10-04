@@ -8,7 +8,15 @@ import { AuthCallback } from './domains/auth/pages/AuthCallback';
 import { ChooseRole } from './domains/onboarding/pages/ChooseRole';
 import { ClientOnboarding } from './domains/onboarding/pages/ClientOnboarding';
 import { PlannerOnboarding } from './domains/onboarding/pages/PlannerOnboarding';
+
+import { ClientLayout } from './domains/client/components/ClientLayout';
 import { ClientHome } from './domains/client/pages/ClientHome';
+import { ClientEvents } from './domains/client/pages/ClientEvents';
+import { EventWizard } from './domains/client/pages/EventWizard';
+import { ClientEventDetails } from './domains/client/pages/ClientEventDetails';
+import { ClientProposals } from './domains/client/pages/ClientProposals';
+import { ClientProfile } from './domains/client/pages/ClientProfile';
+
 import { PlannerHome } from './domains/planner/pages/PlannerHome';
 
 function App() {
@@ -54,10 +62,18 @@ function App() {
             path="/client" 
             element={
               <ProtectedRoute allowedRole="client">
-                <ClientHome />
+                <ClientLayout />
               </ProtectedRoute>
-            } 
-          />
+            }
+          >
+            <Route index element={<ClientHome />} />
+            <Route path="events" element={<ClientEvents />} />
+            <Route path="events/new" element={<EventWizard />} />
+            <Route path="events/:eventId" element={<ClientEventDetails />} />
+            <Route path="proposals" element={<ClientProposals />} />
+            <Route path="profile" element={<ClientProfile />} />
+          </Route>
+
           <Route 
             path="/planner" 
             element={
