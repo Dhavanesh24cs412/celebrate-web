@@ -4,8 +4,11 @@ import { Button } from '../../../core/components/ui/Button';
 import { ArrowLeft, ArrowRight, Check, UploadCloud } from 'lucide-react';
 import { EVENT_WIZARD_CONFIG } from '../config/eventWizardConfig';
 import { EventCarousel } from '../components/EventCarousel';
+import { StyleCarousel } from '../components/StyleCarousel';
 import { supabase } from '../../../core/lib/supabase';
 import { useAuth } from '../../auth/components/AuthProvider';
+import { HexColorPicker } from "react-colorful";
+import namer from "color-namer";
 
 const STEPS = [
   { id: 1, title: 'Details', subtitle: 'Event basics' },
@@ -18,6 +21,7 @@ export const EventWizard: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [themeColorHex, setThemeColorHex] = useState('#c54228');
 
   // Core Form State
   const [formData, setFormData] = useState({
@@ -42,6 +46,17 @@ export const EventWizard: React.FC = () => {
   const { user } = useAuth();
 
   const activeConfig = formData.type ? EVENT_WIZARD_CONFIG[formData.type] : null;
+
+  const handleColorChange = (color: string) => {
+    setThemeColorHex(color);
+    try {
+      const names = namer(color);
+      const semanticName = names.ntc[0].name;
+      updateForm('colors', semanticName);
+    } catch (e) {
+      // safe fallback
+    }
+  };
 
   const updateForm = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -154,7 +169,8 @@ export const EventWizard: React.FC = () => {
         },
         style_preferences: {
           style: formData.style,
-          colors: formData.colors
+          colors: formData.colors || 'Terracotta',
+          color_hex: themeColorHex
         },
         status: 'open'
       };
@@ -250,7 +266,7 @@ export const EventWizard: React.FC = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-celebrate-navy mb-2">Date *</label>
+                    <label className="block text-sm font-medium text-celebrate-navy mb-2">When is your event *</label>
                     <input 
                       type="date" 
                       value={formData.date}
@@ -270,45 +286,15 @@ export const EventWizard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-celebrate-navy mb-2">Expected Guests *</label>
-                    <input 
-                      type="number" 
-                      value={formData.guestCount}
-                      onChange={(e) => updateForm('guestCount', e.target.value)}
-                      placeholder="e.g. 250"
-                      className="w-full px-4 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy focus:ring-1 focus:ring-celebrate-navy outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-celebrate-navy mb-2">Budget Range (in Lakhs) *</label>
-                    <div className="flex items-center space-x-2">
-                      <div className="relative w-full">
-                        <input 
-                          type="number" 
-                          step="0.1"
-                          value={formData.budgetMin}
-                          onChange={(e) => updateForm('budgetMin', e.target.value)}
-                          placeholder="Min (e.g. 0.5)"
-                          className="w-full pl-4 pr-8 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy outline-none transition-all"
-                        />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-celebrate-navy/50 font-medium">L</span>
-                      </div>
-                      <span className="text-celebrate-navy/40">-</span>
-                      <div className="relative w-full">
-                        <input 
-                          type="number" 
-                          step="0.1"
-                          value={formData.budgetMax}
-                          onChange={(e) => updateForm('budgetMax', e.target.value)}
-                          placeholder="Max (e.g. 5)"
-                          className="w-full pl-4 pr-8 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy outline-none transition-all"
-                        />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-celebrate-navy/50 font-medium">L</span>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-celebrate-navy mb-2">Expected Guests *</label>
+                  <input 
+                    type="number" 
+                    value={formData.guestCount}
+                    onChange={(e) => updateForm('guestCount', e.target.value)}
+                    placeholder="e.g. 250"
+                    className="w-full px-4 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy focus:ring-1 focus:ring-celebrate-navy outline-none transition-all"
+                  />
                 </div>
               </div>
             </div>
@@ -441,32 +427,34 @@ export const EventWizard: React.FC = () => {
               <div className="mt-8 space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-celebrate-navy mb-2">Overall Style</label>
-                  <div className="flex flex-wrap gap-2">
-                    {activeConfig.styles.map(style => (
-                      <button
-                        key={style}
-                        onClick={() => updateForm('style', style)}
-                        className={`px-5 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
-                          formData.style === style 
-                            ? 'border-celebrate-navy bg-celebrate-navy text-white shadow-md' 
-                            : 'border-celebrate-navy/20 text-celebrate-navy/70 hover:border-celebrate-navy/50 bg-white'
-                        }`}
-                      >
-                        {style}
-                      </button>
-                    ))}
-                  </div>
+                  <StyleCarousel 
+                    eventType={formData.type}
+                    styles={activeConfig.styles}
+                    selectedStyle={formData.style}
+                    onSelect={(styleName) => updateForm('style', styleName)}
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-celebrate-navy mb-2">Preferred Colors / Theme</label>
-                  <input 
-                    type="text" 
-                    value={formData.colors}
-                    onChange={(e) => updateForm('colors', e.target.value)}
-                    placeholder="e.g. Pastel Pink and Gold, or Vintage Theme"
-                    className="w-full px-4 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy focus:ring-1 focus:ring-celebrate-navy outline-none transition-all"
-                  />
+                  <label className="block text-sm font-medium text-celebrate-navy mb-4">Preferred Colors / Theme</label>
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 bg-celebrate-cream/30 p-6 rounded-2xl border border-celebrate-navy/5">
+                    <HexColorPicker color={themeColorHex} onChange={handleColorChange} />
+                    <div className="flex flex-col items-center justify-center space-y-4 pt-4 sm:pt-0">
+                      <div 
+                        className="w-24 h-24 rounded-full border-4 border-white shadow-md transition-colors duration-200"
+                        style={{ backgroundColor: themeColorHex }}
+                      />
+                      <div className="text-center">
+                        <span className="block text-xs font-bold text-celebrate-navy/50 uppercase tracking-wider mb-1">Semantic Match</span>
+                        <span className="block text-xl font-serif text-celebrate-navy">
+                          {formData.colors || 'Terracotta'}
+                        </span>
+                        <span className="block text-sm text-celebrate-navy/60 font-mono mt-1">
+                          {themeColorHex.toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -514,6 +502,35 @@ export const EventWizard: React.FC = () => {
               <p className="text-celebrate-navy/70">Any final notes for the planners.</p>
               
               <div className="mt-8 space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-celebrate-navy mb-2">Budget Range (in Lakhs) *</label>
+                  <div className="flex items-center space-x-2">
+                    <div className="relative w-full">
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        value={formData.budgetMin}
+                        onChange={(e) => updateForm('budgetMin', e.target.value)}
+                        placeholder="Min (e.g. 0.5)"
+                        className="w-full pl-4 pr-8 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy outline-none transition-all"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-celebrate-navy/50 font-medium">L</span>
+                    </div>
+                    <span className="text-celebrate-navy/40">-</span>
+                    <div className="relative w-full">
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        value={formData.budgetMax}
+                        onChange={(e) => updateForm('budgetMax', e.target.value)}
+                        placeholder="Max (e.g. 5)"
+                        className="w-full pl-4 pr-8 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy outline-none transition-all"
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-celebrate-navy/50 font-medium">L</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-celebrate-navy mb-2">Special Requirements & Notes</label>
                   <textarea 
