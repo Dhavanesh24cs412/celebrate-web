@@ -61,7 +61,7 @@ Celebrate streamlines the entire lifecycle from discovery to execution.
 
 ---
 
-## 🧠 Smart Matching Engine (How We Match)
+## Smart Matching Engine (How We Match)
 
 The matching engine is the core intelligence of Celebrate. It does not rely on random discovery; instead, it uses a multi-layered funnel to pair clients with the perfect planner.
 
@@ -85,7 +85,7 @@ The planners are scored based on the combined output of Phase 2 and Phase 3. The
 
 ---
 
-## 🔐 Authentication, API, and Database
+## Authentication, API, and Database
 
 - **Authentication:** Powered entirely by Supabase Auth, supporting secure Email/Password logins. The session state is strictly managed and tied to the `users` table.
 - **Row Level Security (RLS):** Security is enforced at the database level. Clients can only see their own events and received proposals. Planners can only see events they are matched with, their own portfolios, and their own submitted proposals. Service-role credentials are strictly kept out of the frontend.
@@ -93,7 +93,7 @@ The planners are scored based on the combined output of Phase 2 and Phase 3. The
 
 ---
 
-## 🛠️ Local Development Setup
+## Local Development Setup
 
 To get Celebrate running on your local machine:
 
