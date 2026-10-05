@@ -1,8 +1,10 @@
-# Celebrate: AI-Powered Event Operating System
+# Celebrate: Intelligent Event Planning Marketplace
 
-Celebrate is an **AI-powered Operating System for the Event Industry** designed to unify **Clients** and **Event Management Teams (Planners)** within a single, intelligent ecosystem. 
+Celebrate is a modern **event-planning marketplace** built to connect clients with the right event planners based on more than basic filters. It combines structured event requirements, visual references, planner portfolios, and **CLIP-based semantic matching** to understand both what a client wants and what a planner can deliver.
 
-By digitizing the highly fragmented event lifecycle—from intelligent client acquisition and AI-assisted proposal generation to business operations—Celebrate provides a highly sophisticated, transparent, and visually rich platform to orchestrate celebrations of all scales.
+Using **CLIP (Contrastive Language–Image Pre-training)**, Celebrate can connect visual inspiration and textual preferences with relevant planner portfolio content, enabling deeper matching based on event style, aesthetics, services, experiences, and overall vision.
+
+By bringing clients, planners, event requirements, portfolios, proposals, and event workflows into one connected ecosystem, Celebrate transforms fragmented event planning into a more intelligent, transparent, and visually driven experience—from discovering the right planner to turning an idea into a complete celebration.
 
 ---
 
@@ -93,33 +95,57 @@ The planners are scored based on the combined output of Phase 2 and Phase 3. The
 
 ---
 
-## Local Development Setup
+## Local Development & Contributor Setup
 
-To get Celebrate running on your local machine:
+To protect production data and ensure a stable testing environment, **contributors must never connect directly to the production database**. Instead, Celebrate uses Supabase's local development workflow powered by Docker. This spins up an isolated, full-stack replica of the database on your local machine.
 
 ### 1. Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- `npm` or `yarn`
-- [Supabase CLI](https://supabase.com/docs/guides/cli) (optional, for local database testing)
+- **Git** & **Node.js** (v18 or higher recommended)
+- **Docker Desktop**: Must be installed and running ([Download Docker](https://docs.docker.com/get-docker/))
+- **Supabase CLI**: Required for local DB management ([Installation Guide](https://supabase.com/docs/guides/cli))
 
-### 2. Installation
-Clone the repository and install the dependencies:
+### 2. Fork, Clone & Install
+Fork the repository on GitHub, clone it to your local machine, and install dependencies:
 ```bash
-git clone https://github.com/your-username/celebrate.git
-cd celebrate
+git clone https://github.com/YOUR_USERNAME/celebrate.git
+cd celebrate-web
 npm install
 ```
 
-### 3. Environment Variables
-Create a `.env` or `.env.local` file in the root directory and add your Supabase project keys:
+### 3. Initialize the Local Database
+Open your standard terminal (e.g., VS Code Terminal, PowerShell, or Command Prompt) and ensure you are in the root directory of the cloned project (`cd celebrate-web`).
+
+With Docker running in the background, use `npx` to run the Supabase CLI and spin up your isolated local environment:
+```bash
+npx supabase start
+```
+*Note: This command downloads the Supabase Docker images and starts a local Postgres database, Auth server, and Storage bucket. The initial run may take a few minutes.*
+
+Once the containers are running, the terminal will output your local credentials (including `API URL` and `anon key`).
+
+### 4. Apply Database Migrations (Schema Only)
+To ensure your local database structure precisely matches production, apply the repository's migrations:
+```bash
+npx supabase migration up
+```
+***How this works (Security Note):** This command does **NOT** connect to the production database and does **NOT** download live user data. It simply reads the `.sql` migration files stored inside the `supabase/migrations/` folder in this Git repository and executes them to recreate the empty tables, relationships, and RLS policies locally.*
+
+### 5. Environment Variables
+Create a `.env.local` file in the root directory. Copy the local `API URL` and `anon key` provided by the `supabase start` output:
 ```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+# Use the local Supabase credentials (DO NOT use production keys)
+VITE_SUPABASE_URL=http://127.0.0.1:54321
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5c... (copy your specific key from CLI output)
 ```
 
-### 4. Running the Development Server
-Boot up the Vite dev server:
+### 6. Run the Application
+Boot up the Vite development server:
 ```bash
 npm run dev
 ```
-The application will be accessible at `http://localhost:5173/`.
+The application will be accessible at `http://localhost:5173/`. You can now safely build UI changes, interact with the application, and test database writes securely within your local Docker container! When you're finished, you can stop the local database by running `supabase stop`.
+
+### 7. Syncing Future Database Changes
+When you pull new code from GitHub, you might also receive new database migrations (e.g., if a teammate added a new table). To sync your local Docker database with these new changes:
+- **Standard Update**: Run `npx supabase migration up`. Supabase will detect the newly pulled `.sql` files and apply only the new changes.
+- **Clean Slate Reset (Recommended)**: Run `npx supabase db reset`. This completely wipes your local database and rebuilds it from scratch using all migration files. This is highly recommended when pulling major updates to ensure your local schema is perfectly clean.

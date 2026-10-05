@@ -1,12 +1,10 @@
 # Contributing to Celebrate
 
-First repo for building the Celebrate Web App.
-
 ---
 
-## 📊 Project Overview
+## Project Overview
 
-This is a React-based application with a collaborative workflow. The repository uses **Git**, **GitHub**, and **Pull Requests** to manage contributions efficiently.
+This is a React-based application with a collaborative workflow. The repository uses **Supabase CLI**, **Docker**, **Git**, **GitHub** and **Pull Requests** to manage contributions efficiently.
 
 ### Tech Stack
 
@@ -16,7 +14,7 @@ This is a React-based application with a collaborative workflow. The repository 
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Getting Started](#getting-started)
 - [For Contributors (Fork & PR)](#for-contributors-fork--pr)
@@ -27,7 +25,7 @@ This is a React-based application with a collaborative workflow. The repository 
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -35,22 +33,43 @@ This is a React-based application with a collaborative workflow. The repository 
 - Git configured
 - Python 3.10+ (for AI services)
 
-### Installation
+### Local Database Setup (Required)
 
-1. Create a `.env` file in the root directory:
-   ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+To protect production data and ensure a stable testing environment, **contributors must never connect directly to the production database**. Instead, Celebrate uses Supabase's local development workflow powered by Docker. This spins up an isolated, full-stack replica of the database on your local machine.
+
+1. **Install Prerequisites**: Ensure you have [Docker Desktop](https://docs.docker.com/get-docker/) installed and running, along with the [Supabase CLI](https://supabase.com/docs/guides/cli).
+2. **Initialize Local Database**:
+   Open your standard terminal (e.g., VS Code Terminal, PowerShell, or Command Prompt) and ensure you are in the root directory of the cloned project (`cd celebrate-web`). With Docker running, start your isolated environment:
+   ```bash
+   npx supabase start
    ```
-2. Install dependencies and run:
+   *(This downloads Supabase Docker images and starts an isolated local Postgres database, Auth, and Storage server.)*
+3. **Apply Database Migrations (Schema Only)**:
+   ```bash
+   npx supabase migration up
+   ```
+   ***How this works (Security Note):** This command does **NOT** connect to the production database and does **NOT** download live user data. It reads the `.sql` migration files stored inside the `supabase/migrations/` folder in this repository and executes them to recreate the empty tables, relationships, and policies locally.*
+4. **Environment Variables**:
+   Create a `.env.local` file in the root directory and copy the local `API URL` and `anon key` provided by the CLI output:
+   ```env
+   # Use the local Supabase credentials (DO NOT use production keys)
+   VITE_SUPABASE_URL=http://127.0.0.1:54321
+   VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5c... (copy your specific key from CLI output)
+   ```
+5. **Install Dependencies & Run**:
    ```bash
    npm install
    npm run dev
    ```
+   The application will be accessible at `http://localhost:5173/`.
+6. **Syncing Future Database Changes**:
+   When you pull new code from the repository, you may receive new database migration files. To sync your local database:
+   - **Standard Update**: Run `npx supabase migration up` to apply only the newly downloaded migrations.
+   - **Clean Slate Reset (Recommended)**: Run `npx supabase db reset` to completely wipe and rebuild your local database from scratch, ensuring a perfectly clean environment.
 
 ---
 
-## 👥 For Contributors (Fork & PR)
+## For Contributors (Fork & PR)
 
 ### Step 1: Fork the Repository
 
@@ -130,7 +149,7 @@ Then open a **Pull Request** on GitHub with a clear description of your changes.
 
 ---
 
-## 🔍 For Admins (Review & Merge)
+## For Admins (Review & Merge)
 
 ### Reviewing Pull Requests
 
@@ -190,7 +209,7 @@ git branch -d <branch-name>
 
 ---
 
-## 📝 Pull Request Template
+## Pull Request Template
 
 When creating a PR, include the following information in `.github/pull_request_template.md` (or directly in the PR description):
 
@@ -210,7 +229,7 @@ When creating a PR, include the following information in `.github/pull_request_t
 
 ---
 
-## 📌 Commit Message Guidelines
+## Commit Message Guidelines
 
 Follow the conventional commits format:
 
@@ -225,7 +244,7 @@ chore: update dependencies
 
 ---
 
-## 🆘 Troubleshooting
+## Troubleshooting
 
 | Issue | Solution |
 |------|----------|
@@ -236,7 +255,7 @@ chore: update dependencies
 
 ---
 
-## 📧 Need Help?
+## Need Help?
 
 If you encounter any issues, please:
 1. Check the **Troubleshooting** section above
@@ -244,7 +263,3 @@ If you encounter any issues, please:
 3. Create a new issue with a clear description
 
 ---
-
-## 🎉 Happy Coding!
-
-Thank you for contributing to Celebrate! 🚀
