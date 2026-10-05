@@ -79,11 +79,12 @@ export const EventWizard: React.FC = () => {
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const selectedFile = files[0];
       setFormData(prev => ({
         ...prev,
-        referenceMedia: [...prev.referenceMedia, ...newFiles]
+        referenceMedia: [selectedFile]
       }));
     }
   };
@@ -458,36 +459,47 @@ export const EventWizard: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-celebrate-navy mb-2">Reference Images</label>
-                  <label className="w-full border-2 border-dashed border-celebrate-navy/20 rounded-2xl p-8 flex flex-col items-center justify-center bg-celebrate-cream/30 hover:bg-celebrate-cream/50 transition-colors cursor-pointer">
-                    <input 
-                      type="file" 
-                      multiple 
-                      accept="image/png, image/jpeg" 
-                      className="hidden" 
-                      onChange={handleFileUpload}
-                    />
-                    <UploadCloud className="w-8 h-8 text-celebrate-navy/40 mb-3" />
-                    <p className="text-sm font-medium text-celebrate-navy">Click to upload reference images</p>
-                    <p className="text-xs text-celebrate-navy/50 mt-1">PNG, JPG up to 5MB</p>
-                  </label>
-
-                  {formData.referenceMedia.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-3">
-                      {formData.referenceMedia.map((file, idx) => (
-                        <div key={idx} className="relative group">
-                          <div className="w-20 h-20 bg-celebrate-cream rounded-lg border border-celebrate-navy/10 overflow-hidden flex items-center justify-center">
-                            <img src={URL.createObjectURL(file)} alt="preview" className="object-cover w-full h-full" />
-                          </div>
-                          <button 
-                            type="button"
-                            onClick={() => removeFile(idx)}
-                            className="absolute -top-2 -right-2 w-6 h-6 bg-celebrate-terracotta text-white rounded-full text-xs font-bold shadow opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                          >
-                            ×
-                          </button>
+                  <label className="block text-sm font-medium text-celebrate-navy mb-2">Reference Image</label>
+                  
+                  {formData.referenceMedia.length === 0 ? (
+                    <label className="w-full border-2 border-dashed border-celebrate-navy/20 rounded-2xl p-8 flex flex-col items-center justify-center bg-celebrate-cream/30 hover:bg-celebrate-cream/50 transition-colors cursor-pointer min-h-[200px]">
+                      <input 
+                        type="file" 
+                        accept="image/png, image/jpeg" 
+                        className="hidden" 
+                        onChange={handleFileUpload}
+                      />
+                      <UploadCloud className="w-8 h-8 text-celebrate-navy/40 mb-3" />
+                      <p className="text-sm font-medium text-celebrate-navy">Click to upload reference image</p>
+                      <p className="text-xs text-celebrate-navy/50 mt-1">PNG, JPG up to 5MB</p>
+                    </label>
+                  ) : (
+                    <div className="relative group w-full">
+                      <label className="block w-full border-2 border-dashed border-celebrate-navy/20 rounded-2xl overflow-hidden cursor-pointer bg-celebrate-cream/30">
+                        <input 
+                          type="file" 
+                          accept="image/png, image/jpeg" 
+                          className="hidden" 
+                          onChange={handleFileUpload}
+                        />
+                        <img 
+                          src={URL.createObjectURL(formData.referenceMedia[0])} 
+                          alt="preview" 
+                          className="w-full object-cover max-h-[400px]" 
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <p className="text-white font-medium flex items-center gap-2">
+                            <UploadCloud className="w-5 h-5" /> Change Image
+                          </p>
                         </div>
-                      ))}
+                      </label>
+                      <button 
+                        type="button"
+                        onClick={() => removeFile(0)}
+                        className="absolute -top-3 -right-3 w-8 h-8 bg-celebrate-terracotta text-white rounded-full text-lg font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center hover:bg-red-600"
+                      >
+                        ×
+                      </button>
                     </div>
                   )}
                 </div>

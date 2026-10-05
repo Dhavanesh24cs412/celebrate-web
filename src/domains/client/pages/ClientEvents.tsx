@@ -12,6 +12,8 @@ interface EventData {
   budget_min: number;
   budget_max: number;
   status: string;
+  reference_media: string[];
+  signedImageUrl?: string | null;
   event_types: {
     name: string;
   };
@@ -37,6 +39,7 @@ export const ClientEvents: React.FC = () => {
           budget_min,
           budget_max,
           status,
+          reference_media,
           event_types ( name )
         `)
         .eq('client_id', user.id)
@@ -45,7 +48,20 @@ export const ClientEvents: React.FC = () => {
       if (error) {
         console.error('Error fetching events:', error);
       } else {
-        setEvents((data as any) || []);
+        const eventsData = (data as any) || [];
+        
+        // Generate signed URLs for the reference images since the bucket is private
+        const eventsWithUrls = await Promise.all(eventsData.map(async (event: any) => {
+          if (event.reference_media && event.reference_media.length > 0) {
+            const { data: urlData } = await supabase.storage
+              .from('client-event-media')
+              .createSignedUrl(event.reference_media[0], 3600); // 1 hour expiry
+            return { ...event, signedImageUrl: urlData?.signedUrl || null };
+          }
+          return event;
+        }));
+
+        setEvents(eventsWithUrls);
       }
       setLoading(false);
     };
@@ -85,18 +101,35 @@ export const ClientEvents: React.FC = () => {
             <div 
               key={event.id} 
               onClick={() => window.location.href = `/client/events/${event.id}`}
-              className="bg-white rounded-3xl p-6 shadow-sm border border-celebrate-navy/10 hover:shadow-lg transition-all duration-300 group cursor-pointer relative overflow-hidden"
+              className="bg-white rounded-3xl p-6 shadow-sm border border-celebrate-navy/10 hover:shadow-lg transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col sm:flex-row gap-6"
             >
               {/* Card highlight effect */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-celebrate-terracotta to-celebrate-gold opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <div className="text-xs font-bold text-celebrate-terracotta uppercase tracking-wider mb-1">
-                    {event.event_types?.name || 'Event'}
+              {/* Image Section */}
+              <div className="w-full sm:w-48 h-48 rounded-2xl overflow-hidden bg-celebrate-cream shrink-0 border border-celebrate-navy/5 relative">
+                {event.signedImageUrl ? (
+                  <img 
+                    src={event.signedImageUrl} 
+                    alt={event.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-celebrate-navy/30 font-serif text-sm">No Image</span>
                   </div>
-                  <h3 className="text-2xl font-serif text-celebrate-navy leading-tight">{event.name}</h3>
-                </div>
+                )}
+              </div>
+
+              {/* Details Section */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <div className="text-xs font-bold text-celebrate-terracotta uppercase tracking-wider mb-1">
+                      {event.event_types?.name || 'Event'}
+                    </div>
+                    <h3 className="text-2xl font-serif text-celebrate-navy leading-tight">{event.name}</h3>
+                  </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
                   event.status === 'draft' ? 'bg-gray-50 text-gray-600 border-gray-200' :
                   event.status === 'open' ? 'bg-blue-50 text-blue-700 border-blue-200' :
@@ -134,6 +167,7 @@ export const ClientEvents: React.FC = () => {
                   {event.budget_min ? `${event.budget_min}L - ` : ''}{event.budget_max}L
                 </div>
               </div>
+            </div>
             </div>
           ))}
         </div>
