@@ -2,7 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../core/lib/supabase';
 import { useAuth } from '../../auth/components/AuthProvider';
-import { ArrowLeft, Calendar, MapPin, Users, Wallet, Loader2, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Users, Wallet, Loader2, Image as ImageIcon, Camera, Video, Music, Utensils, Sparkles, Mic, Lightbulb, PartyPopper, Gamepad2, Star, ExternalLink } from 'lucide-react';
+import { EVENT_WIZARD_CONFIG } from '../config/eventWizardConfig';
+
+const getServiceIcon = (serviceName: string) => {
+  const name = serviceName.toLowerCase();
+  if (name.includes('photo')) return Camera;
+  if (name.includes('video')) return Video;
+  if (name.includes('music') || name.includes('dj') || name.includes('sound')) return Music;
+  if (name.includes('food') || name.includes('beverage') || name.includes('cake')) return Utensils;
+  if (name.includes('decor') || name.includes('mandap') || name.includes('floral') || name.includes('stage')) return Sparkles;
+  if (name.includes('host') || name.includes('emcee') || name.includes('mic')) return Mic;
+  if (name.includes('light') || name.includes('led') || name.includes('visual')) return Lightbulb;
+  if (name.includes('game') || name.includes('activit')) return Gamepad2;
+  if (name.includes('balloon') || name.includes('party')) return PartyPopper;
+  return Star;
+};
 
 export const ClientEventDetails: React.FC = () => {
   const { eventId } = useParams();
@@ -68,6 +83,11 @@ export const ClientEventDetails: React.FC = () => {
   
   // Format dynamic questions (excluding 'special')
   const structuredAnswers = Object.entries(requirements).filter(([key]) => key !== 'special');
+
+  // Fetch dynamic style description
+  const eventConfig = EVENT_WIZARD_CONFIG[event.event_types?.name];
+  const activeStyleObj = eventConfig?.styles.find((s: any) => s.name === stylePreferences.style);
+  const styleDescription = activeStyleObj?.description || 'Custom style';
 
   return (
     <div className="max-w-4xl mx-auto pb-16 animate-in fade-in duration-500">
@@ -152,10 +172,29 @@ export const ClientEventDetails: React.FC = () => {
             </span>
           </div>
           
-          {event.venue_status === 'booked' && event.venue && (
+          {['booked', 'venue_booked', 'selected'].includes(event.venue_status) && (event.venue || event.venue_address) && (
             <div className="flex flex-col">
               <span className="block text-xs font-medium text-celebrate-terracotta uppercase tracking-wider mb-2">Venue Address</span>
-              <span className="text-celebrate-navy/80 font-medium">{event.venue}</span>
+              {(() => {
+                const addressText = event.venue_address || (event.venue && !['Booked Venue', 'Selected Venue'].includes(event.venue) ? event.venue : '');
+                if (!addressText) return <span className="text-celebrate-navy/80 font-medium italic">Address pending</span>;
+
+                return addressText.match(/^https?:\/\//i) ? (
+                  <a 
+                    href={addressText} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center text-celebrate-navy/80 font-medium underline hover:text-celebrate-terracotta transition-colors break-all"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                    View on Map
+                  </a>
+                ) : (
+                  <span className="text-celebrate-navy/80 font-medium break-words">
+                    {addressText}
+                  </span>
+                );
+              })()}
             </div>
           )}
 
@@ -180,7 +219,7 @@ export const ClientEventDetails: React.FC = () => {
           <div>
             <span className="block text-xs font-medium text-celebrate-terracotta uppercase tracking-wider mb-4">Overall Vibe</span>
             <div className="flex items-center gap-6">
-              <div className="w-24 h-24 rounded-2xl bg-celebrate-cream/50 border border-celebrate-navy/10 overflow-hidden flex items-center justify-center shrink-0">
+              <div className="w-40 h-40 rounded-2xl bg-celebrate-cream/50 border border-celebrate-navy/10 overflow-hidden flex items-center justify-center shrink-0">
                 {stylePreferences.style ? (
                   <img 
                     src={`/event-styles/${event.event_types?.name?.toLowerCase().replace(/ /g, '_') || 'wedding'}/${stylePreferences.style.toLowerCase().replace(/ /g, '_')}.webp`} 
@@ -199,10 +238,15 @@ export const ClientEventDetails: React.FC = () => {
                   <span className="font-serif text-celebrate-navy/40 capitalize">Vibe</span>
                 )}
               </div>
-              <div>
-                <span className="inline-block px-4 py-2 bg-celebrate-cream text-celebrate-navy rounded-xl text-lg font-serif">
+              <div className="flex flex-col">
+                <h4 className="text-2xl font-serif text-celebrate-navy mb-2">
                   {stylePreferences.style || 'Not specified'}
-                </span>
+                </h4>
+                {stylePreferences.style && (
+                  <p className="text-sm text-celebrate-navy/70 leading-relaxed max-w-sm">
+                    {styleDescription}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -235,11 +279,15 @@ export const ClientEventDetails: React.FC = () => {
         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-celebrate-navy/5 mb-8">
           <h3 className="text-lg font-medium text-celebrate-navy mb-6">Services Needed</h3>
           <div className="flex flex-wrap gap-3">
-            {event.services.map((svc: string, idx: number) => (
-              <span key={idx} className="px-5 py-2.5 bg-celebrate-cream text-celebrate-navy font-medium rounded-xl border border-celebrate-navy/5">
-                {svc}
-              </span>
-            ))}
+            {event.services.map((svc: string, idx: number) => {
+              const Icon = getServiceIcon(svc);
+              return (
+                <span key={idx} className="flex items-center gap-2 px-5 py-2.5 bg-celebrate-cream text-celebrate-navy font-medium rounded-xl border border-celebrate-navy/5 shadow-sm transition-transform hover:-translate-y-1">
+                  <Icon className="w-4 h-4 text-celebrate-terracotta" />
+                  {svc}
+                </span>
+              );
+            })}
           </div>
         </div>
       )}
@@ -251,13 +299,13 @@ export const ClientEventDetails: React.FC = () => {
             <ImageIcon className="w-5 h-5 mr-2 text-celebrate-terracotta" />
             Reference Media
           </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="flex flex-col gap-6">
             {mediaUrls.map((url, idx) => (
-              <div key={idx} className="aspect-square rounded-2xl overflow-hidden border border-celebrate-navy/10 relative group">
+              <div key={idx} className="w-full rounded-2xl overflow-hidden border border-celebrate-navy/10 relative group bg-celebrate-cream/20 flex justify-center items-center p-2 sm:p-4">
                 <img 
                   src={url} 
                   alt={`Reference ${idx + 1}`} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="max-w-full max-h-[600px] w-auto h-auto object-contain rounded-xl"
                 />
               </div>
             ))}

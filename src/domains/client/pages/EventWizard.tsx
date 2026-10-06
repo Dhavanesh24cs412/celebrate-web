@@ -127,7 +127,7 @@ export const EventWizard: React.FC = () => {
       if (!eventType) throw new Error("Event type not found in database.");
 
       let mappedVenueStatus = null;
-      if (formData.venueStatus === 'booked') mappedVenueStatus = 'selected';
+      if (formData.venueStatus === 'selected') mappedVenueStatus = 'selected';
       if (formData.venueStatus === 'need_venue') mappedVenueStatus = 'not_selected';
 
       // 2. Upload Files to Supabase Storage
@@ -155,7 +155,7 @@ export const EventWizard: React.FC = () => {
         name: formData.name,
         event_date: formData.date || new Date().toISOString(),
         city: formData.city,
-        venue: formData.venueStatus === 'booked' ? 'Booked Venue' : null,
+        venue: formData.venueStatus === 'selected' ? 'Selected Venue' : null,
         venue_status: mappedVenueStatus,
         venue_address: formData.venueAddress,
         guest_count: parseInt(formData.guestCount) || 1,
@@ -397,12 +397,12 @@ export const EventWizard: React.FC = () => {
                     className="w-full sm:w-1/2 px-4 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy outline-none bg-white transition-all"
                   >
                     <option value="" disabled>Select venue status...</option>
-                    <option value="booked">Booked</option>
+                    <option value="selected">Selected</option>
                     <option value="need_venue">Need Venue</option>
                   </select>
                 </div>
 
-                {formData.venueStatus === 'booked' && (
+                {formData.venueStatus === 'selected' && (
                   <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                     <label className="block text-sm font-medium text-celebrate-navy mb-2">Venue Address / Google Maps Link *</label>
                     <input 
