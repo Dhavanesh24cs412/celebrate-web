@@ -169,10 +169,10 @@ git fetch origin
 
 ```bash
 # Switch to their branch
-git checkout <branch-name>
+gh pr checkout <PR-number>
 
-# Ensure it's up to date
-git pull origin <branch-name>
+# Merge the changes and delete the branch
+gh pr merge --merge --delete-branch
 ```
 4. Clean Install & Run:
 
