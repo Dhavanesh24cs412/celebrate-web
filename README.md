@@ -1,4 +1,4 @@
-# Celebrate: Intelligent Event Planning Marketplace
+# Celebrate: Intelligent Event Planning Marketplace!
 
 Celebrate is a modern **event-planning marketplace** built to connect clients with the right event planners based on more than basic filters. It combines structured event requirements, visual references, planner portfolios, and **CLIP-based semantic matching** to understand both what a client wants and what a planner can deliver.
 
