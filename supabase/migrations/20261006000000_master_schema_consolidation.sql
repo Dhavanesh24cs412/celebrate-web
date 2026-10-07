@@ -97,6 +97,7 @@ GRANT EXECUTE ON FUNCTION public.complete_onboarding() TO authenticated;
 CREATE TABLE public.event_types (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE,
+    styles text[] DEFAULT '{}',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -121,10 +122,10 @@ CREATE TABLE public.events (
     venue_status public.venue_status,
     venue_address TEXT,
     
-    -- Scale & Budget
+    -- Scale & Budget (Stored in Lakhs)
     guest_count INTEGER NOT NULL,
-    budget_min NUMERIC,
-    budget_max NUMERIC NOT NULL,
+    budget_min NUMERIC CHECK (budget_min >= 0.5),
+    budget_max NUMERIC NOT NULL CHECK (budget_max <= 500.0 AND (budget_min IS NULL OR budget_max >= budget_min)),
     budget_flexibility public.budget_flexibility,
     
     -- Status
@@ -180,3 +181,67 @@ CREATE POLICY "Clients can delete their own media" ON storage.objects FOR DELETE
 INSERT INTO public.event_types (name) VALUES 
 ('Wedding'), ('Reception'), ('Engagement'), ('Corporate'), ('Haldi'), ('Mehandi'), ('Sangeet'), ('Birthday'), ('Private Parties')
 ON CONFLICT (name) DO NOTHING;
+
+-- ==========================================
+-- 8. PLANNER PORTFOLIOS & PROFILES EXTENSION
+-- ==========================================
+
+-- Alter Existing Table (Basic Info)
+ALTER TABLE public.planner_profiles 
+ADD COLUMN IF NOT EXISTS company_address text,
+ADD COLUMN IF NOT EXISTS instagram text,
+ADD COLUMN IF NOT EXISTS website text,
+ADD COLUMN IF NOT EXISTS operatable_cities text[] DEFAULT '{}';
+
+-- Create Portfolio Table (Event-specific Offerings)
+CREATE TABLE IF NOT EXISTS public.planner_portfolios (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    planner_id uuid NOT NULL REFERENCES public.planner_profiles(user_id) ON DELETE CASCADE,
+    event_type_id uuid NOT NULL REFERENCES public.event_types(id),
+    
+    -- Budget limits for this specific event type (Stored in Lakhs)
+    budget_min numeric CHECK (budget_min >= 0.5),
+    budget_max numeric CHECK (budget_max <= 500.0 AND budget_max >= budget_min),
+    
+    -- Array of strings mapping to EVENT_WIZARD_CONFIG services
+    services jsonb DEFAULT '[]'::jsonb,
+    
+    -- Crucial for CLIP Matching: Stores grouped images 
+    -- Expected structure: [{ "theme_name": string, "images": string[] }] (max 4 images per theme)
+    themes jsonb DEFAULT '[]'::jsonb, 
+    
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    
+    -- Ensure a planner only has one portfolio configuration per event type
+    UNIQUE(planner_id, event_type_id)
+);
+
+-- Row Level Security for Portfolios
+ALTER TABLE public.planner_portfolios ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Planners can manage their own portfolios" ON public.planner_portfolios 
+  FOR ALL TO authenticated USING (auth.uid() = planner_id);
+CREATE POLICY "Portfolios are readable by authenticated clients" ON public.planner_portfolios 
+  FOR SELECT TO authenticated USING (true);
+
+-- Storage Bucket for Planner Portfolios
+INSERT INTO storage.buckets (id, name, public) VALUES ('planner-portfolio-media', 'planner-portfolio-media', false) ON CONFLICT (id) DO NOTHING;
+CREATE POLICY "Planners can upload portfolio media" ON storage.objects 
+  FOR INSERT TO authenticated WITH CHECK (bucket_id = 'planner-portfolio-media' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "Planners can view their own portfolio media" ON storage.objects 
+  FOR SELECT TO authenticated USING (bucket_id = 'planner-portfolio-media' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY "Planners can delete their own portfolio media" ON storage.objects 
+  FOR DELETE TO authenticated USING (bucket_id = 'planner-portfolio-media' AND (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ==========================================
+-- 9. SEED EVENT STYLES
+-- ==========================================
+UPDATE public.event_types SET styles = ARRAY['Traditional', 'Modern', 'Luxury', 'Simple', 'Boho'] WHERE name = 'Wedding';
+UPDATE public.event_types SET styles = ARRAY['Elegant', 'Luxury', 'Modern', 'Traditional', 'Minimal'] WHERE name = 'Reception';
+UPDATE public.event_types SET styles = ARRAY['Simple', 'Elegant', 'Traditional', 'Modern', 'Luxury'] WHERE name = 'Engagement';
+UPDATE public.event_types SET styles = ARRAY['Professional', 'Modern', 'Creative', 'Minimalist'] WHERE name = 'Corporate';
+UPDATE public.event_types SET styles = ARRAY['Traditional', 'Modern'] WHERE name = 'Haldi';
+UPDATE public.event_types SET styles = ARRAY['Traditional', 'Boho', 'Modern'] WHERE name = 'Mehandi';
+UPDATE public.event_types SET styles = ARRAY['Luxury', 'Modern', 'Traditional'] WHERE name = 'Sangeet';
+UPDATE public.event_types SET styles = ARRAY['Themed', 'Minimal', 'Luxury'] WHERE name = 'Birthday';
+UPDATE public.event_types SET styles = ARRAY['Casual', 'Themed', 'Vibeful'] WHERE name = 'Private Parties';

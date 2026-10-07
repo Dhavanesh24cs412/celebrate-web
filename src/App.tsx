@@ -18,6 +18,10 @@ import { ClientProposals } from './domains/client/pages/ClientProposals';
 import { ClientProfile } from './domains/client/pages/ClientProfile';
 
 import { PlannerHome } from './domains/planner/pages/PlannerHome';
+import { PlannerLayout } from './domains/planner/components/PlannerLayout';
+import { PlannerLeads } from './domains/planner/pages/PlannerLeads';
+import { PlannerSubmissions } from './domains/planner/pages/PlannerSubmissions';
+import { PlannerProfile } from './domains/planner/pages/PlannerProfile';
 
 function App() {
   return (
@@ -78,10 +82,15 @@ function App() {
             path="/planner" 
             element={
               <ProtectedRoute allowedRole="planner">
-                <PlannerHome />
+                <PlannerLayout />
               </ProtectedRoute>
-            } 
-          />
+            }
+          >
+            <Route index element={<PlannerHome />} />
+            <Route path="leads" element={<PlannerLeads />} />
+            <Route path="submissions" element={<PlannerSubmissions />} />
+            <Route path="profile" element={<PlannerProfile />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
