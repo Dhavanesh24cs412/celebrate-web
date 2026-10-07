@@ -53,7 +53,7 @@ The platform serves two primary sides of the event marketplace:
 Celebrate streamlines the entire lifecycle from discovery to execution. 
 
 > **Architecture Flow Diagram**  
-> [![Celebrate Architecture](https://drive.google.com/file/d/1Z97tQORwSt0C7ikZCtl5x4dENeX3jqn2/view?usp=sharing)]
+> [![Celebrate Architecture](docs/celebrate-end-to-end-workflow.drawio.svg)](docs/celebrate-end-to-end-workflow.drawio.svg)
 > 
 
 1. **Client Request:** Clients navigate a highly visual, guided wizard to input hard requirements (date, budget, guest count) and stylistic preferences (color palettes, overall style imagery).
