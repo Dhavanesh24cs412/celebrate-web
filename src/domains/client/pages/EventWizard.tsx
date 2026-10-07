@@ -9,6 +9,13 @@ import { supabase } from '../../../core/lib/supabase';
 import { useAuth } from '../../auth/components/AuthProvider';
 import { HexColorPicker } from "react-colorful";
 import namer from "color-namer";
+import Select from 'react-select';
+import { City } from 'country-state-city';
+
+const indianCities = City.getCitiesOfCountry('IN')?.map(city => ({
+  value: city.name,
+  label: city.name
+})) || [];
 
 const STEPS = [
   { id: 1, title: 'Details', subtitle: 'Event basics' },
@@ -277,12 +284,25 @@ export const EventWizard: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-celebrate-navy mb-2">Location / City *</label>
-                    <input 
-                      type="text" 
-                      value={formData.city}
-                      onChange={(e) => updateForm('city', e.target.value)}
+                    <Select
+                      options={indianCities}
+                      value={indianCities.find(c => c.value === formData.city) || null}
+                      onChange={(selected) => updateForm('city', selected?.value || '')}
                       placeholder="e.g. Mumbai"
-                      className="w-full px-4 py-3 rounded-xl border border-celebrate-navy/20 focus:border-celebrate-navy focus:ring-1 focus:ring-celebrate-navy outline-none transition-all"
+                      className="react-select-container"
+                      classNamePrefix="react-select"
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          padding: '0.35rem',
+                          borderRadius: '0.75rem',
+                          borderColor: 'rgba(29, 53, 87, 0.2)',
+                          boxShadow: 'none',
+                          '&:hover': {
+                            borderColor: 'rgba(29, 53, 87, 1)'
+                          }
+                        })
+                      }}
                     />
                   </div>
                 </div>
