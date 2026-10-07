@@ -159,7 +159,7 @@ export const PlannerProfile: React.FC = () => {
                     loadedSelectedEvents.push(eventName);
                     loadedPortfolios[eventName] = {
                         budget_min: p.budget_min,
-                        budget_max: p.budget_max,
+                        budget_max: Math.min(p.budget_max, 100.0),
                         services: p.services || [],
                         styles: p.themes || [] 
                     };
@@ -497,7 +497,7 @@ const EventPortfolioForm = ({ eventName, control, isEditing }: { eventName: stri
                             range
                             disabled={!isEditing}
                             min={0.5}
-                            max={500}
+                            max={100}
                             step={0.1}
                             value={[minField.value || 0.5, maxField.value || 5.0]}
                             onChange={(val) => {

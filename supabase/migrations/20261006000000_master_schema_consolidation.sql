@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS public.planner_portfolios (
     
     -- Budget limits for this specific event type (Stored in Lakhs)
     budget_min numeric CHECK (budget_min >= 0.5),
-    budget_max numeric CHECK (budget_max <= 500.0 AND budget_max >= budget_min),
+    budget_max numeric CHECK (budget_max <= 100.0 AND budget_max >= budget_min),
     
     -- Array of strings mapping to EVENT_WIZARD_CONFIG services
     services jsonb DEFAULT '[]'::jsonb,
